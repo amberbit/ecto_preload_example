@@ -35,35 +35,34 @@ defmodule EctoPreloadExample do
   defp maybe_preload_comments(query, true), do: maybe_preload_comments(query, %{})
 
   defp maybe_preload_comments(query, params) do
-    from(posts in query,
-      left_join: comment in Comment,
-      as: :preloaded_comment,
-      on: comment.post_id == posts.id,
-      preload: [comments: comment]
-    )
-    |> maybe_preload_comment_author(params[:author])
+    comments_query =
+      from(comment in Comment)
+      |> maybe_preload_comment_author(params[:author])
+
+    from(posts in query, preload: [comments: ^comments_query])
   end
 
   defp maybe_preload_comment_author(query, nil), do: query
 
   defp maybe_preload_comment_author(query, _) do
-    from([posts, preloaded_comment: comment] in query,
+    from(comment in query,
       left_join: author in Author,
       on: author.id == comment.author_id,
-      preload: [comments: {comment, author: author}]
+      preload: [author: author]
     )
   end
 
   defp maybe_preload_tags(query, nil), do: query
 
   defp maybe_preload_tags(query, _) do
-    from(posts in query,
-      left_join: tagging in Tagging,
-      on: tagging.post_id == posts.id,
-      left_join: tag in Tag,
-      on: tag.id == tagging.tag_id,
-      preload: [tags: tag]
-    )
+    tags_query =
+      from(tagging in Tagging,
+        inner_join: tag in Tag,
+        on: tag.id == tagging.tag_id,
+        preload: [tag: tag]
+      )
+
+    query = from(posts in query, preload: [{:taggings, ^tags_query}, :tags])
   end
 
   defp maybe_filter_by_tag(query, nil), do: query
