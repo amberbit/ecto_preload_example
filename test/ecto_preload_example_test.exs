@@ -68,4 +68,17 @@ defmodule EctoPreloadExampleTest do
     assert length(post1.tags) == 2
     assert length(post2.tags) == 1
   end
+
+  test "should filter by tag name" do
+    [post1, post2] = EctoPreloadExample.list_posts(%{:tags => true}, %{:tag => "tag2"})
+    assert length(post1.tags) == 2
+    assert length(post2.tags) == 1
+
+    [post1, post2] = EctoPreloadExample.list_posts(%{}, %{:tag => "tag2"})
+    assert post1.tags.__struct__ == Ecto.Association.NotLoaded
+    assert post2.tags.__struct__ == Ecto.Association.NotLoaded
+
+    [_post2] = EctoPreloadExample.list_posts(%{:tags => true}, %{:tag => "tag1"})
+    [_post2] = EctoPreloadExample.list_posts(%{}, %{:tag => "tag1"})
+  end
 end
