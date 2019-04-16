@@ -33,4 +33,16 @@ defmodule EctoPreloadExampleTest do
 
     assert length(posts) == 2
   end
+
+  test "should not preload anything by default" do
+    [post1, _] = EctoPreloadExample.list_posts()
+
+    assert post1.author.__struct__ == Ecto.Association.NotLoaded
+  end
+
+  test "should preload authors if we need them in one query", %{author1: author1} do
+    [post1, _] = EctoPreloadExample.list_posts(%{:author => true})
+
+    assert post1.author.id == author1.id
+  end
 end
