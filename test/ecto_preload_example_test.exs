@@ -45,4 +45,21 @@ defmodule EctoPreloadExampleTest do
 
     assert post1.author.id == author1.id
   end
+
+  test "should preload comments if we want to", %{comment: comment} do
+    [post1, _] = EctoPreloadExample.list_posts(%{:comments => true})
+
+    [comment] = post1.comments
+    assert comment.id == comment.id
+    assert comment.author.__struct__ == Ecto.Association.NotLoaded
+  end
+
+  test "should preload comments with authors if we want to", %{comment: comment, author2: author2} do
+    [post1, _] = EctoPreloadExample.list_posts(%{:comments => %{:author => true}})
+
+    [comment] = post1.comments
+    assert comment.id == comment.id
+    assert comment.author.id == author2.id
+  end
+
 end

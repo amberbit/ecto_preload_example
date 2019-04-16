@@ -7,6 +7,7 @@ defmodule EctoPreloadExample.Post do
 
     belongs_to :author, EctoPreloadeExample.Author
     has_many :taggings, EctoPreloadExample.Tagging
+    has_many :comments, EctoPreloadExample.Comment
     has_many :tags, through: [:taggings, :tag]
   end
 end
