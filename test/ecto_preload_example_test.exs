@@ -89,4 +89,10 @@ defmodule EctoPreloadExampleTest do
     [_post2] = EctoPreloadExample.list_posts(%{:tags => true}, %{:tag => "tag1"})
     [_post2] = EctoPreloadExample.list_posts(%{}, %{:tag => "tag1"})
   end
+
+  test "should filter posts by author name" do
+    [post1] = EctoPreloadExample.list_posts(%{}, %{:author => "Author 2"})
+    [post2] = EctoPreloadExample.list_posts(%{}, %{:author => "Author 1"})
+    assert post1.id != post2.id
+  end
 end

@@ -19,6 +19,7 @@ defmodule EctoPreloadExample do
     |> maybe_preload_comments(params[:comments])
     |> maybe_preload_tags(params[:tags])
     |> maybe_filter_by_tag(filters[:tag])
+    |> maybe_filter_by_author(filters[:author])
   end
 
   defp maybe_preload_author(query, nil), do: query
@@ -74,6 +75,16 @@ defmodule EctoPreloadExample do
       inner_join: tag in Tag,
       on: tag.id == tagging.tag_id,
       where: tag.name == ^tag_name
+    )
+  end
+
+  defp maybe_filter_by_author(query, nil), do: query
+
+  defp maybe_filter_by_author(query, author_name) do
+    from(posts in query,
+      inner_join: author in Author,
+      on: author.id == posts.author_id,
+      where: author.name == ^author_name
     )
   end
 end
