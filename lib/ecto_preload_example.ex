@@ -1,18 +1,19 @@
 defmodule EctoPreloadExample do
-  @moduledoc """
-  Documentation for EctoPreloadExample.
-  """
+  import Ecto.Query
+  alias EctoPreloadExample.{Repo, Post, Author, Comment, Tag, Tagging}
 
-  @doc """
-  Hello world.
+  def list_posts() do
+    build_query()
+    |> Repo.all()
+  end
 
-  ## Examples
+  defp base_query() do
+    from(posts in Post)
+  end
 
-      iex> EctoPreloadExample.hello
-      :world
+  defp build_query() do
+    query = base_query()
 
-  """
-  def hello do
-    :world
+    query
   end
 end
