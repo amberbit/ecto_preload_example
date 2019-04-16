@@ -3,4 +3,3 @@ defmodule EctoPreloadExample.Repo do
     otp_app: :ecto_preload_example,
     adapter: Ecto.Adapters.Postgres
 end
-

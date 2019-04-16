@@ -6,5 +6,4 @@ config :ecto_preload_example, EctoPreloadExample.Repo,
   password: "postgres",
   hostname: "localhost"
 
-
 config :ecto_preload_example, ecto_repos: [EctoPreloadExample.Repo]

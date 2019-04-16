@@ -9,7 +9,7 @@ defmodule EctoPreloadExample.Application do
     # List all child processes to be supervised
     children = [
       # Starts a worker by calling: EctoPreloadExample.Worker.start_link(arg)
-      {EctoPreloadExample.Repo, []},
+      {EctoPreloadExample.Repo, []}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

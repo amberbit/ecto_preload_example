@@ -22,6 +22,7 @@ defmodule EctoPreloadExample do
   end
 
   defp maybe_preload_author(query, nil), do: query
+
   defp maybe_preload_author(query, _) do
     from(posts in query,
       left_join: author in Author,
@@ -32,6 +33,7 @@ defmodule EctoPreloadExample do
 
   defp maybe_preload_comments(query, nil), do: query
   defp maybe_preload_comments(query, true), do: maybe_preload_comments(query, %{})
+
   defp maybe_preload_comments(query, params) do
     from(posts in query,
       left_join: comment in Comment,
@@ -43,6 +45,7 @@ defmodule EctoPreloadExample do
   end
 
   defp maybe_preload_comment_author(query, nil), do: query
+
   defp maybe_preload_comment_author(query, _) do
     from([posts, preloaded_comment: comment] in query,
       left_join: author in Author,
@@ -52,6 +55,7 @@ defmodule EctoPreloadExample do
   end
 
   defp maybe_preload_tags(query, nil), do: query
+
   defp maybe_preload_tags(query, _) do
     from(posts in query,
       left_join: tagging in Tagging,
@@ -63,6 +67,7 @@ defmodule EctoPreloadExample do
   end
 
   defp maybe_filter_by_tag(query, nil), do: query
+
   defp maybe_filter_by_tag(query, tag_name) do
     from(posts in query,
       inner_join: tagging in Tagging,
@@ -72,5 +77,4 @@ defmodule EctoPreloadExample do
       where: tag.name == ^tag_name
     )
   end
-
 end
