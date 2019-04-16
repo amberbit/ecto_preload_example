@@ -17,13 +17,13 @@ defmodule EctoPreloadExample do
     query
     |> maybe_preload_author(params[:author])
     |> maybe_preload_comments(params[:comments])
+    |> maybe_preload_tags(params[:tags])
   end
 
   defp maybe_preload_author(query, nil), do: query
   defp maybe_preload_author(query, _) do
     from(posts in query,
       left_join: author in Author,
-      as: :preloaded_post_author,
       on: author.id == posts.author_id,
       preload: [author: author]
     )
@@ -45,9 +45,19 @@ defmodule EctoPreloadExample do
   defp maybe_preload_comment_author(query, _) do
     from([posts, preloaded_comment: comment] in query,
       left_join: author in Author,
-      as: :preloaded_comment_author,
       on: author.id == comment.author_id,
       preload: [comments: {comment, author: author}]
+    )
+  end
+
+  defp maybe_preload_tags(query, nil), do: query
+  defp maybe_preload_tags(query, _) do
+    from(posts in query,
+      left_join: tagging in Tagging,
+      on: tagging.post_id == posts.id,
+      left_join: tag in Tag,
+      on: tag.id == tagging.tag_id,
+      preload: [tags: tag]
     )
   end
 end

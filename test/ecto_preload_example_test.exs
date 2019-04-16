@@ -62,4 +62,10 @@ defmodule EctoPreloadExampleTest do
     assert comment.author.id == author2.id
   end
 
+  test "should preload tags if we want to" do
+    [post1, post2] = EctoPreloadExample.list_posts(%{:tags => true})
+
+    assert length(post1.tags) == 2
+    assert length(post2.tags) == 1
+  end
 end

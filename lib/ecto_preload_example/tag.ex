@@ -4,8 +4,6 @@ defmodule EctoPreloadExample.Tag do
   schema "tags" do
     field :name, :string
 
-    belongs_to :post, EctoPreloadExample.Post
-
     has_many :taggings, EctoPreloadExample.Tagging
     has_many :posts, through: [:taggings, :post]
   end
